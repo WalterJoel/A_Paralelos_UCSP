@@ -25,7 +25,7 @@ ITEM A : If we try to parallelize the for i loop (the outer loop), which variabl
        - i(compartida), n(compartida), count(privada)
 ITEM B : If we parallelize the for i loop using the scoping you specified in the
   previous part, are there any loop-carried dependences? Explain your answer.
-        -
+        - No hay problema porque al ser count privado, no habra problemas porque cada thread tiene su stack
 ITEM C :Can we parallelize the call to memcpy ? Can we modify the code so that this
                  part of the function will be parallelizable?
        - Si podemos paralelizarlo entre comillas porque no es del todo paralelo
@@ -55,12 +55,12 @@ ITEM D :
     #include<stdlib.h>
 
     void Count_Sort(int a[],int n){
-        int i , j , count;
+        int i , j ;
         int my_rank      = omp_get_thread_num();
         int thread_count = omp_get_num_threads();
         int temp[n];
         for ( i = 0;i<n ;i ++) {
-            count = 0;
+            int count = 0;
             for ( j = 0;j < n ; j ++)
                 if ( a [j]< a [ i ])
                     count ++;
