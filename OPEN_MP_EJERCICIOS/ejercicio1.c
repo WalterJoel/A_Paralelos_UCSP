@@ -8,17 +8,14 @@
 #include <stdlib.h>
 #include <time.h>
 
-int max_integer(float number)
-{
-    return (int)number;
-}
+
 
 int thread_size; //cantidad de thredas
 int tam_vec;     // numero de elementos
 int random_ini;
 int random_fin;
 
-float* random_array=NULL;
+int* random_array=NULL;
 int* contador=NULL;
 
 //para un bloque
@@ -33,7 +30,7 @@ void histogram()
         for(int i=init;i<fin;++i)       ///ENtonces en un bloque que lo hace un thread elijo
         {
             #pragma omp critical  //ovbio porque ....
-            ++(contador[max_integer(random_array[i])]); ///tengo 5 intervalos -> si voy de la pos 1 al 5 imaginando
+            ++(contador[random_array[i]]); ///tengo 5 intervalos -> si voy de la pos 1 al 5 imaginando
             //bloques de 5, segun la pos de 1 a 5, incremento el contador en el intervalo X segun la frecuencia
         }
     }
@@ -61,11 +58,11 @@ int main(int argc, char **argv)
     //VECTOR
     
         srand(time(NULL));
-        random_array=(float*)malloc(tam_vec * sizeof(float)); //lleno el array de randoms
+        random_array=(int*)malloc(tam_vec * sizeof(int)); //lleno el array de randoms
         for(unsigned int i=0;i<tam_vec;++i)
         {
             random_array[i]=(rand()%random_ini)/REC; ///limito el random
-            printf("%f ",random_array[i]);
+            printf("%i ",random_array[i]);
         }
         printf("\n\n");
     
@@ -95,10 +92,11 @@ int main(int argc, char **argv)
 }
 
 ////mostrando salida
+/*
+[capi@Capi OPEN_MP_EJERCICIOS]$ gcc -g -Wall -fopenmp -o ejercicio1 ejercicio1.c
+[capi@Capi OPEN_MP_EJERCICIOS]$ ./ejercicio1 5 20 5
+2 4 0 1 3 3 1 4 2 4 0 4 2 3 2 0 2 1 2 0 
 
-/* [capi@Capi OPEN_MP_EJERCICIOS]$ ./ejercicio1 5 20 5
-3.240000 0.640000 1.230000 0.790000 1.610000 2.200000 3.070000 1.530000 3.540000 2.350000
- 0.000000 3.160000 4.610000 4.220000 4.180000 4.470000 2.860000 4.140000 3.990000 1.970000 
+4 3 6 3 4 
 
-3 4 3 5 5 
 */
